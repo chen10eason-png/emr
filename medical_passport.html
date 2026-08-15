@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Medical Passport</title>
+<style>
+:root{
+  --bg:#f3f8ff; --card:#fff; --primary:#2878d8; --primary2:#64b5f6;
+  --text:#17324d; --muted:#6d8298; --line:#dce9f5; --soft:#eaf4ff;
+  --danger:#c94b5a; --shadow:0 12px 35px rgba(40,120,216,.10);
+}
+*{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",Arial,sans-serif;background:linear-gradient(135deg,#eef7ff,#f9fcff);color:var(--text)}
+header{background:linear-gradient(135deg,#1769c2,#62b5f7);color:white;padding:28px 20px 70px}
+.top{max-width:1180px;margin:auto;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.brand{font-size:25px;font-weight:800;letter-spacing:.3px}.subtitle{opacity:.9;margin-top:5px}
+select,button,input,textarea{font:inherit} select{border:0;border-radius:12px;padding:10px 14px;background:white;color:#17324d;font-weight:700}
+.container{max-width:1180px;margin:-42px auto 50px;padding:0 18px;position:relative}
+.profile{background:white;border:1px solid rgba(255,255,255,.8);border-radius:22px;padding:22px;box-shadow:var(--shadow);display:grid;grid-template-columns:120px 1fr auto;gap:20px;align-items:center}
+.avatar{width:90px;height:90px;border-radius:24px;background:var(--soft);display:grid;place-items:center;font-size:40px}
+.profile h1{margin:0 0 6px}.meta{color:var(--muted);display:flex;flex-wrap:wrap;gap:10px}
+.btn{border:0;border-radius:12px;padding:11px 16px;background:var(--primary);color:#fff;font-weight:700;cursor:pointer}.btn.secondary{background:#edf6ff;color:var(--primary)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 7px 25px rgba(25,88,150,.06)}
+.card.full{grid-column:1/-1}.card h2{margin:0 0 5px;font-size:19px}.hint{color:var(--muted);font-size:13px;margin-bottom:15px}
+.fields{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.field.full{grid-column:1/-1}
+label{font-size:13px;font-weight:700;color:#46627b;display:block;margin-bottom:6px}
+input,textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:#fbfdff;color:var(--text);outline:none}
+input:focus,textarea:focus{border-color:var(--primary2);box-shadow:0 0 0 3px #e8f4ff}
+textarea{min-height:92px;resize:vertical}.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.item{padding:12px;border:1px solid var(--line);border-radius:13px;background:#fbfdff;margin-bottom:10px}
+.item strong{display:block}.item small{color:var(--muted)}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
+.notice{background:#fff8e8;border:1px solid #f2dfae;border-radius:13px;padding:12px;color:#725b24;font-size:13px;line-height:1.6}
+@media(max-width:760px){.profile{grid-template-columns:75px 1fr}.profile .btn{grid-column:1/-1}.grid,.fields{grid-template-columns:1fr}.card.full{grid-column:auto}.avatar{width:68px;height:68px;font-size:30px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div><div class="brand">🩺 <span data-i18n="title">My Medical Passport</span></div><div class="subtitle" data-i18n="subtitle">Personal multilingual medical record</div></div>
+    <select id="language" aria-label="Language">
+      <option value="zh-TW">繁體中文</option><option value="zh-CN">简体中文</option><option value="en">English</option>
+      <option value="ko">한국어</option><option value="ja">日本語</option><option value="es">Español</option>
+    </select>
+  </div>
+</header>
+
+<main class="container">
+<section class="profile">
+  <div class="avatar">🩺</div>
+  <div><h1 data-i18n="passport">Medical Passport</h1><div class="meta"><span data-i18n="private">Private • Stored locally in this browser</span></div></div>
+  <button class="btn" onclick="saveData()" data-i18n="save">Save</button>
+</section>
+
+<div class="grid">
+<section class="card full">
+  <h2 data-i18n="basic">Basic Information</h2><div class="hint" data-i18n="basicHint">Information that helps identify and contact you safely.</div>
+  <div class="fields">
+    <div><label data-i18n="name">Full name</label><input data-key="name" autocomplete="name"></div>
+    <div><label data-i18n="dob">Date of birth</label><input data-key="dob" type="date"></div>
+    <div><label data-i18n="sex">Sex / Gender (optional)</label><input data-key="sex"></div>
+    <div><label data-i18n="blood">Blood type</label><input data-key="blood" placeholder="e.g. O+"></div>
+    <div><label data-i18n="nationality">Nationality</label><input data-key="nationality"></div>
+    <div><label data-i18n="id">Passport / ID (optional)</label><input data-key="id"></div>
+    <div><label data-i18n="contact">Emergency contact</label><input data-key="contact"></div>
+    <div><label data-i18n="phone">Emergency phone</label><input data-key="phone" type="tel"></div>
+  </div>
+</section>
+
+<section class="card">
+  <h2 data-i18n="allergy">Allergies & Alerts</h2><div class="hint" data-i18n="allergyHint">Medication, food, environmental allergies and important warnings.</div>
+  <textarea data-key="allergy"></textarea>
+</section>
+
+<section class="card">
+  <h2 data-i18n="conditions">Current Conditions</h2><div class="hint" data-i18n="conditionsHint">Diagnosed or ongoing diseases / health conditions.</div>
+  <textarea data-key="conditions"></textarea>
+</section>
+
+<section class="card">
+  <h2 data-i18n="history">Past Medical History</h2><div class="hint" data-i18n="historyHint">Previous illnesses, hospitalizations, injuries and major events.</div>
+  <textarea data-key="history"></textarea>
+</section>
+
+<section class="card">
+  <h2 data-i18n="family">Family History</h2><div class="hint" data-i18n="familyHint">Relevant diseases in parents, siblings, grandparents, etc.</div>
+  <textarea data-key="family"></textarea>
+</section>
+
+<section class="card">
+  <h2 data-i18n="surgery">Surgical / Procedure History</h2><div class="hint" data-i18n="surgeryHint">Surgery, anesthesia, procedures and approximate dates.</div>
+  <textarea data-key="surgery"></textarea>
+</section>
+
+<section class="card">
+  <h2 data-i18n="meds">Medication History</h2><div class="hint" data-i18n="medsHint">Current and previous prescription / OTC medicines, dose and frequency.</div>
+  <textarea data-key="meds"></textarea>
+</section>
+
+<section class="card">
+  <h2 data-i18n="vaccines">Vaccination History</h2><div class="hint" data-i18n="vaccinesHint">Vaccines and approximate dates.</div>
+  <textarea data-key="vaccines"></textarea>
+</section>
+
+<section class="card">
+  <h2 data-i18n="lifestyle">Lifestyle & Social History</h2><div class="hint" data-i18n="lifestyleHint">Smoking, alcohol, exercise, occupation/exposure and other relevant context.</div>
+  <textarea data-key="lifestyle"></textarea>
+</section>
+
+<section class="card">
+  <h2 data-i18n="devices">Implants / Medical Devices</h2><div class="hint" data-i18n="devicesHint">Pacemaker, prosthesis, stent, hearing device, etc.</div>
+  <textarea data-key="devices"></textarea>
+</section>
+
+<section class="card">
+  <h2 data-i18n="preferences">Care Preferences</h2><div class="hint" data-i18n="preferencesHint">Communication needs, accessibility needs and important care preferences.</div>
+  <textarea data-key="preferences"></textarea>
+</section>
+
+<section class="card">
+  <h2 data-i18n="other">Other Important Information</h2><div class="hint" data-i18n="otherHint">Anything a clinician should know that does not fit elsewhere.</div>
+  <textarea data-key="other"></textarea>
+</section>
+
+<section class="card full">
+  <div class="notice" data-i18n="notice">Privacy note: this demo stores data only in your browser's local storage. It is not encrypted and is not suitable for sharing highly sensitive medical information online. For real clinical use, add strong encryption, authentication, audit logs, secure backup and appropriate legal/privacy compliance.</div>
+</section>
+</div>
+<footer>Medical Passport • Static HTML / CSS / JavaScript</footer>
+</main>
+
+<script>
+const T={
+"zh-TW":{title:"我的隨身電子病歷",subtitle:"個人多國語言醫療紀錄",passport:"電子病歷",private:"私人資料 • 儲存在此瀏覽器",save:"儲存",basic:"基本資料",basicHint:"協助醫療人員安全辨識與聯絡你的資訊。",name:"姓名",dob:"出生日期",sex:"性別（選填）",blood:"血型",nationality:"國籍",id:"護照／身分證號（選填）",contact:"緊急聯絡人",phone:"緊急聯絡電話",allergy:"過敏與重要警示",allergyHint:"藥物、食物、環境過敏及其他重要警示。",conditions:"目前疾病／健康狀況",conditionsHint:"已診斷或正在治療的疾病、健康問題。",history:"過去疾病史",historyHint:"過去疾病、住院、受傷及重大醫療事件。",family:"家族病史",familyHint:"父母、兄弟姊妹、祖父母等相關疾病。",surgery:"手術／處置史",surgeryHint:"手術、麻醉、醫療處置及大約日期。",meds:"用藥史",medsHint:"目前及過去處方藥、非處方藥、劑量與頻率。",vaccines:"疫苗接種史",vaccinesHint:"疫苗名稱及大約接種日期。",lifestyle:"生活與社會史",lifestyleHint:"吸菸、酒精、運動、職業／暴露及其他相關背景。",devices:"植入物／醫療裝置",devicesHint:"心律調節器、人工關節、支架、助聽設備等。",preferences:"照護偏好",preferencesHint:"溝通、無障礙需求及重要照護偏好。",other:"其他重要資訊",otherHint:"其他醫療人員需要知道、但無法歸類的資訊。",notice:"隱私提醒：此示範版只將資料儲存在瀏覽器的本機儲存空間，未加密，也不適合用來保存或傳送高度敏感的醫療資料。若要正式使用，請加入強式加密、身分驗證、稽核紀錄、安全備份及適用的法規／隱私合規機制。"},
+"zh-CN":{title:"我的随身电子病历",subtitle:"个人多语言医疗记录",passport:"电子病历",private:"私人资料 • 储存在此浏览器",save:"保存",basic:"基本资料",basicHint:"帮助医疗人员安全识别与联系你的信息。",name:"姓名",dob:"出生日期",sex:"性别（选填）",blood:"血型",nationality:"国籍",id:"护照／身份证号（选填）",contact:"紧急联系人",phone:"紧急联系电话",allergy:"过敏与重要警示",allergyHint:"药物、食物、环境过敏及其他重要警示。",conditions:"目前疾病／健康状况",conditionsHint:"已诊断或正在治疗的疾病、健康问题。",history:"既往病史",historyHint:"过去疾病、住院、受伤及重大医疗事件。",family:"家族病史",familyHint:"父母、兄弟姐妹、祖父母等相关疾病。",surgery:"手术／处置史",surgeryHint:"手术、麻醉、医疗处置及大约日期。",meds:"用药史",medsHint:"目前及过去处方药、非处方药、剂量与频率。",vaccines:"疫苗接种史",vaccinesHint:"疫苗名称及大约接种日期。",lifestyle:"生活与社会史",lifestyleHint:"吸烟、酒精、运动、职业／暴露及其他相关背景。",devices:"植入物／医疗设备",devicesHint:"心脏起搏器、人工关节、支架、助听设备等。",preferences:"照护偏好",preferencesHint:"沟通、无障碍需求及重要照护偏好。",other:"其他重要信息",otherHint:"其他医疗人员需要知道、但无法归类的信息。",notice:"隐私提醒：此示范版只将资料储存在浏览器本地存储中，未加密，也不适合保存或传送高度敏感的医疗资料。正式使用时，请加入强加密、身份验证、审计记录、安全备份及适用的法规／隐私合规机制。"},
+"en":{title:"My Medical Passport",subtitle:"Personal multilingual medical record",passport:"Medical Passport",private:"Private • Stored locally in this browser",save:"Save",basic:"Basic Information",basicHint:"Information that helps identify and contact you safely.",name:"Full name",dob:"Date of birth",sex:"Sex / Gender (optional)",blood:"Blood type",nationality:"Nationality",id:"Passport / ID (optional)",contact:"Emergency contact",phone:"Emergency phone",allergy:"Allergies & Alerts",allergyHint:"Medication, food, environmental allergies and important warnings.",conditions:"Current Conditions",conditionsHint:"Diagnosed or ongoing diseases / health conditions.",history:"Past Medical History",historyHint:"Previous illnesses, hospitalizations, injuries and major events.",family:"Family History",familyHint:"Relevant diseases in parents, siblings, grandparents, etc.",surgery:"Surgical / Procedure History",surgeryHint:"Surgery, anesthesia, procedures and approximate dates.",meds:"Medication History",medsHint:"Current and previous prescription / OTC medicines, dose and frequency.",vaccines:"Vaccination History",vaccinesHint:"Vaccines and approximate dates.",lifestyle:"Lifestyle & Social History",lifestyleHint:"Smoking, alcohol, exercise, occupation/exposure and other relevant context.",devices:"Implants / Medical Devices",devicesHint:"Pacemaker, prosthesis, stent, hearing device, etc.",preferences:"Care Preferences",preferencesHint:"Communication needs, accessibility needs and important care preferences.",other:"Other Important Information",otherHint:"Anything a clinician should know that does not fit elsewhere.",notice:"Privacy note: this demo stores data only in your browser's local storage. It is not encrypted and is not suitable for sharing highly sensitive medical information online. For real clinical use, add strong encryption, authentication, audit logs, secure backup and appropriate legal/privacy compliance."},
+"ko":{title:"나의 휴대용 전자 의료기록",subtitle:"개인 다국어 의료 기록",passport:"의료 여권",private:"개인정보 • 이 브라우저에 로컬 저장",save:"저장",basic:"기본 정보",basicHint:"안전한 신원 확인과 연락에 필요한 정보입니다.",name:"이름",dob:"생년월일",sex:"성별（선택）",blood:"혈액형",nationality:"국적",id:"여권／신분증（선택）",contact:"응급 연락처",phone:"응급 전화번호",allergy:"알레르기 및 주의사항",allergyHint:"약물, 음식, 환경 알레르기 및 중요한 주의사항.",conditions:"현재 질환",conditionsHint:"진단받았거나 현재 치료 중인 질환.",history:"과거 병력",historyHint:"과거 질환, 입원, 부상 및 주요 의료 사건.",family:"가족력",familyHint:"부모, 형제자매, 조부모 등의 관련 질환.",surgery:"수술／시술력",surgeryHint:"수술, 마취, 시술 및 대략적인 날짜.",meds:"복약력",medsHint:"현재 및 과거 처방약／일반의약품, 용량과 복용 빈도.",vaccines:"예방접종력",vaccinesHint:"백신 및 대략적인 접종 날짜.",lifestyle:"생활／사회력",lifestyleHint:"흡연, 음주, 운동, 직업／노출 등.",devices:"삽입물／의료기기",devicesHint:"심박조율기, 인공관절, 스텐트, 보청기 등.",preferences:"진료 선호",preferencesHint:"의사소통, 접근성 및 중요한 진료 선호사항.",other:"기타 중요 정보",otherHint:"의료진이 알아야 할 기타 정보.",notice:"개인정보 안내: 이 데모는 데이터를 브라우저의 로컬 저장소에만 저장합니다. 암호화되지 않았으므로 민감한 의료정보의 실제 저장이나 온라인 공유에 적합하지 않습니다. 실제 서비스에서는 암호화, 인증, 감사 로그, 안전한 백업 및 관련 개인정보 보호 규정을 적용해야 합니다."},
+"ja":{title:"私の携帯用電子カルテ",subtitle:"個人向け多言語医療記録",passport:"メディカルパスポート",private:"プライベート • このブラウザにローカル保存",save:"保存",basic:"基本情報",basicHint:"安全な本人確認と連絡に役立つ情報。",name:"氏名",dob:"生年月日",sex:"性別（任意）",blood:"血液型",nationality:"国籍",id:"パスポート／ID（任意）",contact:"緊急連絡先",phone:"緊急電話番号",allergy:"アレルギー・注意事項",allergyHint:"薬・食物・環境アレルギーなど。",conditions:"現在の病気・健康状態",conditionsHint:"診断済み、または治療中の病気。",history:"既往歴",historyHint:"過去の病気、入院、けが、重要な医療イベント。",family:"家族歴",familyHint:"両親、兄弟姉妹、祖父母などの関連疾患。",surgery:"手術・処置歴",surgeryHint:"手術、麻酔、処置とおおよその日付。",meds:"服薬歴",medsHint:"現在・過去の処方薬／市販薬、用量、頻度。",vaccines:"予防接種歴",vaccinesHint:"ワクチン名とおおよその接種日。",lifestyle:"生活・社会歴",lifestyleHint:"喫煙、飲酒、運動、職業・曝露など。",devices:"インプラント・医療機器",devicesHint:"ペースメーカー、人工関節、ステント、補聴器など。",preferences:"ケアの希望",preferencesHint:"コミュニケーション、アクセシビリティ、ケアに関する希望。",other:"その他の重要情報",otherHint:"医療者に伝えておきたいその他の情報。",notice:"プライバシー注意：このデモ版はデータをブラウザのローカルストレージにのみ保存します。暗号化されていないため、機密性の高い医療情報の実運用には適しません。実際のサービスでは暗号化、認証、監査ログ、安全なバックアップ、関連する法令・プライバシー対策が必要です。"},
+"es":{title:"Mi pasaporte médico",subtitle:"Historia clínica personal multilingüe",passport:"Pasaporte médico",private:"Privado • Guardado localmente en este navegador",save:"Guardar",basic:"Información básica",basicHint:"Información para identificarte y contactarte de forma segura.",name:"Nombre completo",dob:"Fecha de nacimiento",sex:"Sexo / Género (opcional)",blood:"Grupo sanguíneo",nationality:"Nacionalidad",id:"Pasaporte / ID (opcional)",contact:"Contacto de emergencia",phone:"Teléfono de emergencia",allergy:"Alergias y alertas",allergyHint:"Alergias a medicamentos, alimentos, ambiente y advertencias importantes.",conditions:"Enfermedades actuales",conditionsHint:"Enfermedades diagnosticadas o en tratamiento.",history:"Antecedentes médicos",historyHint:"Enfermedades previas, hospitalizaciones, lesiones y eventos importantes.",family:"Antecedentes familiares",familyHint:"Enfermedades relevantes de padres, hermanos, abuelos, etc.",surgery:"Cirugías / Procedimientos",surgeryHint:"Cirugías, anestesia, procedimientos y fechas aproximadas.",meds:"Historial de medicamentos",medsHint:"Medicamentos actuales y anteriores, dosis y frecuencia.",vaccines:"Vacunación",vaccinesHint:"Vacunas y fechas aproximadas.",lifestyle:"Estilo de vida e historia social",lifestyleHint:"Tabaco, alcohol, ejercicio, trabajo/exposición y contexto relevante.",devices:"Implantes / Dispositivos médicos",devicesHint:"Marcapasos, prótesis, stents, audífonos, etc.",preferences:"Preferencias de atención",preferencesHint:"Necesidades de comunicación, accesibilidad y preferencias importantes.",other:"Otra información importante",otherHint:"Cualquier información adicional que el personal médico deba conocer.",notice:"Aviso de privacidad: esta demostración guarda los datos solo en el almacenamiento local del navegador. No están cifrados y no es adecuada para guardar o compartir información médica muy sensible. Para uso clínico real se requieren cifrado, autenticación, registros de auditoría, copias de seguridad y cumplimiento legal/privacidad."}
+};
+function applyLang(lang){document.querySelectorAll("[data-i18n]").forEach(e=>{let k=e.dataset.i18n;if(T[lang][k])e.textContent=T[lang][k]});document.documentElement.lang=lang}
+function saveData(){let d={};document.querySelectorAll("[data-key]").forEach(e=>d[e.dataset.key]=e.value);localStorage.setItem("medicalPassport",JSON.stringify(d));alert(T[document.getElementById("language").value].save+" ✓")}
+function loadData(){try{let d=JSON.parse(localStorage.getItem("medicalPassport")||"{}");document.querySelectorAll("[data-key]").forEach(e=>{if(d[e.dataset.key]!=null)e.value=d[e.dataset.key]})}catch(e){}}
+document.getElementById("language").addEventListener("change",e=>applyLang(e.target.value));
+loadData();applyLang("zh-TW");
+</script>
+</body>
+</html>
