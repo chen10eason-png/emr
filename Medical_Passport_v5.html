@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Passport</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <style>
+    body{margin:0;font-family:Arial,sans-serif;background:#eef7ff}
+    header{background:linear-gradient(135deg,#1976d2,#64b5f6);color:white;padding:24px}
+    .top{display:flex;justify-content:space-between;align-items:center;max-width:900px;margin:auto}
+    .title{font-size:28px;font-weight:bold}
+    .sub{opacity:.9}
+    select{padding:10px;border-radius:12px;border:none;font-weight:bold}
+    .wrap{max-width:900px;margin:auto;padding:20px}
+    .card{background:white;border-radius:18px;padding:20px;box-shadow:0 8px 20px rgba(0,0,0,.08)}
+    label{display:block;margin-top:12px;font-weight:bold;color:#456}
+    input,textarea{width:100%;padding:10px;border:1px solid #d6e8f8;border-radius:10px;box-sizing:border-box}
+    textarea{height:90px}
+    button{margin-top:16px;background:linear-gradient(135deg,#2F8CFF,#5EB8FF);color:white;border:none;padding:12px 22px;border-radius:14px;font-weight:bold;cursor:pointer;box-shadow:0 10px 18px rgba(47,140,255,.3);transition:.15s}
+    button:hover{transform:translateY(-2px)}
+    button:active{transform:translateY(2px)}
+    #qr{display:flex;justify-content:center;padding:18px}
+  </style>
+</head>
+<body>
+<header>
+<div class="top">
+<div>
+<div class="title" id="title">🩺 My Medical Passport</div>
+<div class="sub" id="sub">Personal Medical Record</div>
+</div>
+<select id="lang">
+<option value="zhTW">🇹🇼 繁體中文</option>
+<option value="zhCN">🇨🇳 简体中文</option>
+<option value="en">🇺🇸 English</option>
+<option value="ja">🇯🇵 日本語</option>
+<option value="ko">🇰🇷 한국어</option>
+<option value="es">🇪🇸 Español</option>
+<option value="fr">🇫🇷 Français</option>
+<option value="de">🇩🇪 Deutsch</option>
+<option value="it">🇮🇹 Italiano</option>
+<option value="pt">🇵🇹 Português</option>
+<option value="ru">🇷🇺 Русский</option>
+<option value="ar">🇸🇦 العربية</option>
+</select>
+</div>
+</header>
+
+<div class="wrap">
+<div class="card">
+<label id="l1">姓名</label>
+<input id="name">
+<label id="l2">血型</label>
+<input id="blood">
+<label id="l3">過敏</label>
+<textarea id="allergy"></textarea>
+<label id="l4">疾病史</label>
+<textarea id="history"></textarea>
+<button id="save">儲存</button>
+</div>
+
+<div class="card" style="margin-top:18px">
+<h3>QR Code</h3>
+<div id="qr"></div>
+</div>
+</div>
+
+<script>
+const T={
+zhTW:{title:"我的隨身電子病歷",sub:"個人醫療紀錄",save:"儲存",name:"姓名",blood:"血型",allergy:"過敏",history:"疾病史"},
+zhCN:{title:"我的随身电子病历",sub:"个人医疗记录",save:"保存",name:"姓名",blood:"血型",allergy:"过敏",history:"疾病史"},
+en:{title:"My Medical Passport",sub:"Personal Medical Record",save:"Save",name:"Full Name",blood:"Blood Type",allergy:"Allergies",history:"Medical History"},
+ja:{title:"私のメディカルパスポート",sub:"個人医療記録",save:"保存",name:"氏名",blood:"血液型",allergy:"アレルギー",history:"既往歴"},
+ko:{title:"나의 메디컬 패스포트",sub:"개인 의료 기록",save:"저장",name:"이름",blood:"혈액형",allergy:"알레르기",history:"병력"},
+es:{title:"Mi Pasaporte Médico",sub:"Historia clínica personal",save:"Guardar",name:"Nombre",blood:"Grupo",allergy:"Alergias",history:"Historial"},
+fr:{title:"Mon passeport médical",sub:"Dossier médical",save:"Enregistrer",name:"Nom",blood:"Groupe",allergy:"Allergies",history:"Antécédents"},
+de:{title:"Mein medizinischer Pass",sub:"Krankenakte",save:"Speichern",name:"Name",blood:"Blutgruppe",allergy:"Allergien",history:"Krankengeschichte"},
+it:{title:"Il mio passaporto medico",sub:"Cartella clinica",save:"Salva",name:"Nome",blood:"Gruppo",allergy:"Allergie",history:"Storia"},
+pt:{title:"Meu passaporte médico",sub:"Prontuário",save:"Guardar",name:"Nome",blood:"Tipo",allergy:"Alergias",history:"Histórico"},
+ru:{title:"Мой медицинский паспорт",sub:"Медицинская карта",save:"Сохранить",name:"Имя",blood:"Группа",allergy:"Аллергии",history:"История"},
+ar:{title:"جواز سفري الطبي",sub:"السجل الطبي",save:"حفظ",name:"الاسم",blood:"فصيلة الدم",allergy:"الحساسية",history:"التاريخ المرضي"}
+};
+
+function apply(){
+ let t=T[lang.value];
+ title.innerText='🩺 '+t.title;
+ sub.innerText=t.sub;
+ save.innerText=t.save;
+ l1.innerText=t.name;
+ l2.innerText=t.blood;
+ l3.innerText=t.allergy;
+ l4.innerText=t.history;
+ localStorage.setItem('lang',lang.value);
+}
+lang.onchange=apply;
+lang.value=localStorage.getItem('lang')||'zhTW';
+apply();
+
+save.onclick=async()=>{
+ localStorage.setItem('mp_name',name.value);
+ localStorage.setItem('mp_blood',blood.value);
+ localStorage.setItem('mp_allergy',allergy.value);
+ localStorage.setItem('mp_history',history.value);
+ const {jsPDF}=window.jspdf;
+ const doc=new jsPDF();
+ doc.setFontSize(18); doc.text('Medical Passport',20,20);
+ doc.setFontSize(12);
+ let y=35;
+ [['Name',name.value],['Blood',blood.value],['Allergy',allergy.value],['History',history.value]].forEach(([k,v])=>{doc.text(doc.splitTextToSize(k+': '+v,170),20,y);y+=18;});
+ const pdf=doc.output('datauristring');
+ qr.innerHTML='';
+ QRCode.toCanvas(pdf,{width:220},(e,c)=>{if(!e)qr.appendChild(c);else qr.innerHTML='QR 容量不足';});
+ save.innerText=T[lang.value].save+' ✓';
+ save.style.background='linear-gradient(135deg,#16A34A,#4ADE80)';
+ setTimeout(()=>{save.style.background='linear-gradient(135deg,#2F8CFF,#5EB8FF)';apply();},2000);
+};
+
+['name','blood','allergy','history'].forEach(id=>{const v=localStorage.getItem('mp_'+id);if(v)document.getElementById(id).value=v;});
+</script>
+</body>
+</html>
